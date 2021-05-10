@@ -3,13 +3,13 @@
  * @Author: Tsingwong
  * @Date: 2021-05-10 13:43:12
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-10 13:59:26
+ * @LastEditTime: 2021-05-10 14:10:11
  */
 package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 )
@@ -21,14 +21,13 @@ func main() {
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
-		// 从 response 中读取全部内容
-		b, err := ioutil.ReadAll(resp.Body)
+		// 从 response 中读取全部内容输出到 标准输出中
+		_, err = io.Copy(os.Stdout, resp.Body)
 		// 防止资源泄露，关闭流
 		resp.Body.Close()
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "fetch: reading %v\n", err)
 			os.Exit(1)
 		}
-		fmt.Printf("%s\n", b)
 	}
 }
