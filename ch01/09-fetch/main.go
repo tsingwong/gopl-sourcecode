@@ -29,6 +29,7 @@ func main() {
 		}
 		// 从 response 中读取全部内容输出到 标准输出中
 		_, err = io.Copy(os.Stdout, resp.Body)
+		fmt.Printf("HTTP status: %d\n", resp.StatusCode)
 		// 防止资源泄露，关闭流
 		resp.Body.Close()
 		if err != nil {
