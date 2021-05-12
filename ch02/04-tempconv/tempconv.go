@@ -9,6 +9,7 @@ package tempconv
 
 type Celsius float64    // 摄氏温度
 type Fahrenheit float64 // 华氏温度
+type Kelvin float64     // 开尔温度
 
 const (
 	AbsoluteZeroC Celsius = -273.15 // 绝对零度
