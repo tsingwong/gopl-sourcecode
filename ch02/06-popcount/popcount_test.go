@@ -26,3 +26,8 @@ func BenchmarkTable(b *testing.B) {
 func BenchmarkTableLoop(b *testing.B) {
 	bench(b, PopCountLoop)
 }
+
+// BenchmarkShiftValue-8   	59 550 112	        19.37 ns/op	       0 B/op	       0 allocs/op
+func BenchmarkShiftValue(b *testing.B) {
+	bench(b, PopCountShiftValue)
+}
