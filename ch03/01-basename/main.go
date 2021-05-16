@@ -3,11 +3,12 @@
  * @Author: Tsingwong
  * @Date: 2021-05-14 20:03:51
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-14 20:37:40
+ * @LastEditTime: 2021-05-16 16:15:15
  */
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 )
@@ -23,6 +24,9 @@ func main() {
 
 	fmt.Println(comma("1234567890"))
 	fmt.Println(comma("123"))
+
+	fmt.Println(intsToString([]int{1, 2, 3})) // "[1, 2, 3]"
+
 }
 
 func basename(s string) string {
@@ -58,4 +62,17 @@ func comma(s string) string {
 		return s
 	}
 	return comma(s[:n-3]) + "," + s[n-3:]
+}
+
+func intsToString(values []int) string {
+	var buf bytes.Buffer
+	buf.WriteByte('[')
+	for i, v := range values {
+		if i > 0 {
+			buf.WriteString(", ")
+		}
+		fmt.Fprintf(&buf, "%d", v)
+	}
+	buf.WriteByte(']')
+	return buf.String()
 }
