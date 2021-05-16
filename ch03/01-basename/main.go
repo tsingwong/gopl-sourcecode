@@ -3,13 +3,14 @@
  * @Author: Tsingwong
  * @Date: 2021-05-14 20:03:51
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-16 16:15:15
+ * @LastEditTime: 2021-05-16 16:53:55
  */
 package main
 
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -26,6 +27,10 @@ func main() {
 	fmt.Println(comma("123"))
 
 	fmt.Println(intsToString([]int{1, 2, 3})) // "[1, 2, 3]"
+
+	for i := 1; i < len(os.Args[1:]); i++ {
+		fmt.Printf("%s\n", comma(os.Args[i]))
+	}
 
 }
 
@@ -74,5 +79,19 @@ func intsToString(values []int) string {
 		fmt.Fprintf(&buf, "%d", v)
 	}
 	buf.WriteByte(']')
+	return buf.String()
+}
+
+func unRecursionComma(s string) string {
+	var buf bytes.Buffer
+	pre := len(s) % 3
+	if pre == 0 {
+		pre = 3
+	}
+	buf.WriteString(s[:pre])
+	for i := pre; i < len(s); i += 3 {
+		buf.WriteByte(',')
+		buf.WriteString(s[i : i+3])
+	}
 	return buf.String()
 }
