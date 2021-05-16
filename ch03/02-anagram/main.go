@@ -5,7 +5,7 @@
  * @LastEditors: Tsingwong
  * @LastEditTime: 2021-05-16 17:28:24
  */
-package anagram
+package main
 
 func isAnagram(s1, s2 string) bool {
 	s1Freq := make(map[rune]int)

@@ -5,7 +5,7 @@
  * @LastEditors: Tsingwong
  * @LastEditTime: 2021-05-16 17:29:27
  */
-package anagram
+package main
 
 import "testing"
 
