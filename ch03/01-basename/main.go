@@ -3,7 +3,7 @@
  * @Author: Tsingwong
  * @Date: 2021-05-14 20:03:51
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-16 16:53:55
+ * @LastEditTime: 2021-05-16 17:18:58
  */
 package main
 
@@ -31,6 +31,8 @@ func main() {
 	for i := 1; i < len(os.Args[1:]); i++ {
 		fmt.Printf("%s\n", comma(os.Args[i]))
 	}
+
+	fmt.Printf("%s\n", unRecursionComma("+1234567890.12312312"))
 
 }
 
@@ -84,14 +86,26 @@ func intsToString(values []int) string {
 
 func unRecursionComma(s string) string {
 	var buf bytes.Buffer
-	pre := len(s) % 3
+	mantissaStart := 0
+	if s[0] == '+' || s[0] == '-' {
+		buf.WriteByte(s[0])
+		mantissaStart = 1
+	}
+	mantissaEnd := strings.Index(s, ".")
+	if mantissaEnd == -1 {
+		mantissaEnd = len(s)
+	}
+
+	mantissa := s[mantissaStart:mantissaEnd]
+	pre := len(mantissa) % 3
 	if pre == 0 {
 		pre = 3
 	}
-	buf.WriteString(s[:pre])
-	for i := pre; i < len(s); i += 3 {
+	buf.WriteString(mantissa[:pre])
+	for i := pre; i < len(mantissa); i += 3 {
 		buf.WriteByte(',')
-		buf.WriteString(s[i : i+3])
+		buf.WriteString(mantissa[i : i+3])
 	}
+	buf.WriteString(s[mantissaEnd:])
 	return buf.String()
 }
