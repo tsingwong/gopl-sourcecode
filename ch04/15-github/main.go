@@ -3,7 +3,7 @@
  * @Author: Tsingwong
  * @Date: 2021-05-23 18:48:28
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-23 19:12:54
+ * @LastEditTime: 2021-05-24 22:25:14
  */
 package github
 
@@ -26,17 +26,17 @@ type IssuesSearchResult struct {
 
 type Issue struct {
 	Number   int
-	HTMLURL  string `json: "html_url"`
+	HTMLURL  string `json:"html_url"`
 	Title    string
 	State    string
-	User     string
+	User     *User
 	CreateAt time.Time `json:"create_at"`
 	Body     string
 }
 
 type User struct {
 	Login   string
-	HTMLURL string `json: "html_url"`
+	HTMLURL string `json:"html_url"`
 }
 
 func SearchIssues(terms []string) (*IssuesSearchResult, error) {
