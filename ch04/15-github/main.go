@@ -3,7 +3,7 @@
  * @Author: Tsingwong
  * @Date: 2021-05-23 18:48:28
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-24 22:25:14
+ * @LastEditTime: 2021-05-24 22:42:59
  */
 package github
 
@@ -20,18 +20,18 @@ import (
 const IssuesURL = "https://api.github.com/search/issues"
 
 type IssuesSearchResult struct {
-	TotalCount int `json: "total_count"`
+	TotalCount int `json:"total_count"`
 	Items      []*Issue
 }
 
 type Issue struct {
-	Number   int
-	HTMLURL  string `json:"html_url"`
-	Title    string
-	State    string
-	User     *User
-	CreateAt time.Time `json:"create_at"`
-	Body     string
+	Number    int
+	HTMLURL   string `json:"html_url"`
+	Title     string
+	State     string
+	User      *User
+	CreatedAt time.Time `json:"created_at"`
+	Body      string
 }
 
 type User struct {
@@ -41,6 +41,7 @@ type User struct {
 
 func SearchIssues(terms []string) (*IssuesSearchResult, error) {
 	q := url.QueryEscape(strings.Join(terms, " "))
+	fmt.Println(IssuesURL + "?q=" + q)
 	resp, err := http.Get(IssuesURL + "?q=" + q)
 	if err != nil {
 		return nil, err
