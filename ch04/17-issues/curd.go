@@ -1,10 +1,8 @@
-/*
- * @Description:
- * @Author: Tsingwong
- * @Date: 2021-05-25 07:13:59
- * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-25 07:34:58
- */
+// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
+// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+//!+
+
 package main
 
 import (
@@ -17,11 +15,32 @@ import (
 	"strings"
 )
 
-func Search(term []string) (*IssuesSearchResult, error) {
-	q := url.QueryEscape(strings.Join(term, " "))
-	resp, err := get(IssueURL + "?q=" + q)
+// SearchIssues queries the GitHub issue tracker.
+func SearchIssues(terms []string) (*IssuesSearchResult, error) {
+	q := url.QueryEscape(strings.Join(terms, " "))
+	resp, err := http.Get(IssuesURL + "?q=" + q)
 	if err != nil {
 		return nil, err
+	}
+	//!-
+	// For long-term stability, instead of http.Get, use the
+	// variant below which adds an HTTP request header indicating
+	// that only version 3 of the GitHub API is acceptable.
+	//
+	//   req, err := http.NewRequest("GET", IssuesURL+"?q="+q, nil)
+	//   if err != nil {
+	//       return nil, err
+	//   }
+	//   req.Header.Set(
+	//       "Accept", "application/vnd.github.v3.text-match+json")
+	//   resp, err := http.DefaultClient.Do(req)
+	//!+
+
+	// We must close resp.Body on all execution paths.
+	// (Chapter 5 presents 'defer', which makes this simpler.)
+	if resp.StatusCode != http.StatusOK {
+		resp.Body.Close()
+		return nil, fmt.Errorf("search query failed: %s", resp.Status)
 	}
 
 	var result IssuesSearchResult
@@ -33,6 +52,7 @@ func Search(term []string) (*IssuesSearchResult, error) {
 	return &result, nil
 }
 
+// remember to close the response body.
 func get(url string) (*http.Response, error) {
 	resp, err := http.Get(url)
 	if err != nil {
@@ -52,6 +72,7 @@ func GetIssue(owner string, repo string, number string) (*Issue, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
 	var issue Issue
 	if err := json.NewDecoder(resp.Body).Decode(&issue); err != nil {
 		return nil, err
@@ -66,6 +87,7 @@ func GetIssues(owner string, repo string) ([]Issue, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
 	var issues []Issue
 	if err := json.NewDecoder(resp.Body).Decode(&issues); err != nil {
 		return nil, err
@@ -73,13 +95,14 @@ func GetIssues(owner string, repo string) ([]Issue, error) {
 	return issues, nil
 }
 
-func EdiIssue(owner, repo, number string, fields map[string]string) (*Issue, error) {
+func EditIssue(owner, repo, number string, fields map[string]string) (*Issue, error) {
 	buf := &bytes.Buffer{}
 	encoder := json.NewEncoder(buf)
 	err := encoder.Encode(fields)
 	if err != nil {
 		return nil, err
 	}
+
 	client := &http.Client{}
 	url := strings.Join([]string{APIURL, "repos", owner, repo, "issues", number}, "/")
 	req, err := http.NewRequest("PATCH", url, buf)
@@ -100,4 +123,5 @@ func EdiIssue(owner, repo, number string, fields map[string]string) (*Issue, err
 		return nil, err
 	}
 	return &issue, nil
+
 }

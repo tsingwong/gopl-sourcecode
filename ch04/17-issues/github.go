@@ -1,10 +1,3 @@
-/*
- * @Description:
- * @Author: Tsingwong
- * @Date: 2021-05-25 06:58:34
- * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-25 07:13:33
- */
 package main
 
 import (
@@ -12,8 +5,8 @@ import (
 	"time"
 )
 
-const APIURL = "https://github.com/"
-const IssueURL = APIURL + "search/issues"
+const IssuesURL = "https://api.github.com/search/issues"
+const APIURL = "https://api.github.com"
 
 type IssuesSearchResult struct {
 	TotalCount int `json:"total_count"`
@@ -27,7 +20,7 @@ type Issue struct {
 	State     string
 	User      *User
 	CreatedAt time.Time `json:"created_at"`
-	Body      string
+	Body      string    // in Markdown format
 }
 
 func (i Issue) CacheURL() string {
