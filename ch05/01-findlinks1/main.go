@@ -3,7 +3,7 @@
  * @Author: Tsingwong
  * @Date: 2021-05-26 22:40:15
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-05-26 22:40:17
+ * @LastEditTime: 2021-05-27 07:48:47
  */
 /*
  * @Description:
@@ -41,8 +41,14 @@ func visit(links []string, n *html.Node) []string {
 			}
 		}
 	}
-	for c := n.FirstChild; c != nil; c = c.NextSibling {
-		links = visit(links, c)
+	// for c := n.FirstChild; c != nil; c = c.NextSibling {
+	// 	links = visit(links, c)
+	// }
+	if n.FirstChild != nil {
+		links = visit(links, n.FirstChild)
+	}
+	if n.NextSibling != nil {
+		links = visit(links, n.NextSibling)
 	}
 	return links
 }
