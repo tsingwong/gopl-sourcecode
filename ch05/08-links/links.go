@@ -3,30 +3,29 @@
  * @Author: Tsingwong
  * @Date: 2021-06-03 07:12:00
  * @LastEditors: Tsingwong
- * @LastEditTime: 2021-06-03 07:32:16
+ * @LastEditTime: 2021-06-03 15:10:45
  */
-package main
+package links
 
 import (
 	"fmt"
 	"net/http"
-	"os"
 
 	"golang.org/x/net/html"
 )
 
-func main() {
-	for _, url := range os.Args[1:] {
-		links, err := Extract(url)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "link: %v", err)
-			continue
-		}
-		for _, link := range links {
-			fmt.Println(link)
-		}
-	}
-}
+// func main() {
+// 	for _, url := range os.Args[1:] {
+// 		links, err := Extract(url)
+// 		if err != nil {
+// 			fmt.Fprintf(os.Stderr, "link: %v", err)
+// 			continue
+// 		}
+// 		for _, link := range links {
+// 			fmt.Println(link)
+// 		}
+// 	}
+// }
 
 func Extract(url string) ([]string, error) {
 	resp, err := http.Get(url)
